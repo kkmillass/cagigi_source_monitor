@@ -22,4 +22,4 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
           AIRTABLE_TABLE: "Source Monitor"
-        run: node cagigi_source_monitor.mjs
+        run: node cagigi_source_monitor.js
