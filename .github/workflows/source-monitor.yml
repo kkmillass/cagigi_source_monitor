@@ -1,25 +1,25 @@
 name: CAGIGI source monitor
- 
+
 on:
   schedule:
-    - cron: "0 9 * * 1"
+    - cron: 0 9 * * 1
   workflow_dispatch: {}
-   
+
 jobs:
   check-sources:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
- 
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
- 
+
       - name: Run source monitor
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
-          AIRTABLE_TABLE: "Source Monitor"
+          AIRTABLE_TABLE: Source Monitor
         run: node cagigi_source_monitor.js
