@@ -32,6 +32,21 @@
   }
   .pillar-row .dot{ width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:0.5rem; }
   .pillar-row .label{ color:var(--ink-dim); display:flex; align-items:center; }
+  .stat-strip{ display:flex; gap:12px; flex-wrap:wrap; margin-top:1.4rem; }
+  .stat-card{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:10px;
+    padding:1rem 1.3rem; min-width:150px;
+  }
+  .stat-card .num{ font-family:'Fraunces', Georgia, serif; font-size:1.8rem; font-weight:500; }
+  .stat-card .lbl{ color:var(--ink-dim); font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; margin-top:0.2rem; }
+  .bar-row{ padding:0.9rem 0; border-top:1px solid var(--line); }
+  .bar-row:first-child{ border-top:none; }
+  .bar-head{ display:flex; justify-content:space-between; font-size:0.78rem; margin-bottom:0.5rem; }
+  .bar-head .label{ display:flex; align-items:center; color:var(--ink-dim); }
+  .bar-head .dot{ width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:0.5rem; }
+  .bar-head .val{ font-size:0.95rem; color:var(--ink); }
+  .bar-track{ height:6px; background:var(--line); border-radius:4px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:4px; }
   .back{ display:inline-block; margin-bottom:1.2rem; font-size:0.75rem; color:var(--ink-dim); }
   footer{ padding:1.5rem clamp(1rem,4vw,3rem); color:var(--ink-dim); font-size:0.68rem; border-top:1px solid var(--line); }
 </style>
@@ -43,6 +58,10 @@
   <h1>Central Asia Gender Implementation Gap Index</h1>
 </header>
 <main>
+  <div class="stat-strip">
+    <div class="stat-card"><div class="num">1</div><div class="lbl">Countries published</div></div>
+    <div class="stat-card"><div class="num">1/1</div><div class="lbl">Legal Frameworks scored</div></div><div class="stat-card"><div class="num">1/1</div><div class="lbl">Institutional Enforcement scored</div></div><div class="stat-card"><div class="num">0/1</div><div class="lbl">Civil Society Signal scored</div></div><div class="stat-card"><div class="num">1/1</div><div class="lbl">Outcome Convergence scored</div></div>
+  </div>
   <div class="grid">
     <a class="card" href="countries/kazakhstan.html">
     <div class="name">Kazakhstan</div>
@@ -58,7 +77,7 @@
       </div>
       <div class="pillar-row">
         <span class="label"><span class="dot" style="background:#A6432F"></span>Civil Society Signal</span>
-        <span>NaN</span>
+        <span>—</span>
       </div>
       <div class="pillar-row">
         <span class="label"><span class="dot" style="background:#6B8F71"></span>Outcome Convergence</span>
