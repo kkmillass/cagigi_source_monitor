@@ -47,6 +47,12 @@
   .ring-label{ position:absolute; top:0; left:0; height:100%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.05rem; }
   .ring-name{ font-size:0.68rem; color:var(--ink-dim); font-weight:600; margin-top:0.5rem; line-height:1.3; }
 
+  .stat-callouts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:1.6rem; }
+  .callout{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.2rem 1.35rem; box-shadow: 0 1px 2px rgba(30,25,10,0.03); }
+  .callout .headline{ font-size:1.5rem; font-weight:800; color:#0F52BA; letter-spacing:-0.01em; }
+  .callout .caption{ font-size:0.82rem; color:var(--ink-dim); margin-top:0.4rem; line-height:1.5; font-weight:500; }
+  .callout .tag{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); font-weight:700; margin-bottom:0.4rem; }
+
   .back{ display:inline-flex; align-items:center; gap:0.35rem; margin-bottom:1.4rem; font-size:0.82rem; color:var(--ink-dim); font-weight:600; }
   .back:hover{ color:var(--ink); }
 
@@ -61,7 +67,11 @@
 
 <header class="hero">
   <p class="eyebrow">Country profile</p>
-  <h1>Turkmenistan</h1>
+  <div style="display:flex; align-items:center; gap:0.9rem; margin-bottom:0.2rem;">
+    <img src="https://flagcdn.com/w80/tm.png"
+         alt="" width="48" style="border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+    <h1 style="margin:0;">Turkmenistan</h1>
+  </div>
   <p class="lede">Scores across CAGIGI's four pillars — the gap between formal gender legislation and its real-world implementation.</p>
 </header>
 <main>
@@ -73,7 +83,7 @@
           <div class="ring-wrap">
     <svg width="92" height="92" viewBox="0 0 92 92" style="transform:rotate(-90deg)">
       <circle cx="46" cy="46" r="41.5" fill="none" stroke="#EDEAE1" stroke-width="9"/>
-      <circle cx="46" cy="46" r="41.5" fill="none" stroke="#C08A2E"
+      <circle cx="46" cy="46" r="41.5" fill="none" stroke="#0F52BA"
         stroke-width="9" stroke-linecap="round"
         stroke-dasharray="260.75219024795285" stroke-dashoffset="87.64170838889527"/>
     </svg>
@@ -84,7 +94,7 @@
           <div class="ring-wrap">
     <svg width="92" height="92" viewBox="0 0 92 92" style="transform:rotate(-90deg)">
       <circle cx="46" cy="46" r="41.5" fill="none" stroke="#EDEAE1" stroke-width="9"/>
-      <circle cx="46" cy="46" r="41.5" fill="none" stroke="#2B8C99"
+      <circle cx="46" cy="46" r="41.5" fill="none" stroke="#0080FE"
         stroke-width="9" stroke-linecap="round"
         stroke-dasharray="260.75219024795285" stroke-dashoffset="173.83479349863524"/>
     </svg>
@@ -106,7 +116,7 @@
           <div class="ring-wrap">
     <svg width="92" height="92" viewBox="0 0 92 92" style="transform:rotate(-90deg)">
       <circle cx="46" cy="46" r="41.5" fill="none" stroke="#EDEAE1" stroke-width="9"/>
-      <circle cx="46" cy="46" r="41.5" fill="none" stroke="#4F8B5E"
+      <circle cx="46" cy="46" r="41.5" fill="none" stroke="#73C2FB"
         stroke-width="9" stroke-linecap="round"
         stroke-dasharray="260.75219024795285" stroke-dashoffset="260.75219024795285"/>
     </svg>
@@ -114,6 +124,94 @@
           <div class="ring-name">Outcome Convergence</div>
         </div>
     </div>
+  </div>
+  
+  <div class="stat-callouts">
+    
+      <div class="callout">
+        <div class="tag">Mobility</div>
+        <div class="headline">0.621 <span style="font-size:1rem;">↑</span></div>
+        <div class="caption" style="margin-top:0;">was 0.422</div>
+        <div class="caption">Proportion of women aged 15–49 years who make their own informed decisions regarding sexual relations, contraceptive use and reproductive health care
+</div>
+        <a class="caption" href="https://sdg.stat.gov.tm/en/indicator/5-6-1" style="text-decoration:underline; display:inline-block; margin-top:0.5rem;">Source ↗</a>
+      </div>
+      <div class="callout">
+        <div class="tag">Reproductive Rights</div>
+        <div class="headline">0.541 <span style="font-size:1rem;">↑</span></div>
+        <div class="caption" style="margin-top:0;">was 0.502</div>
+        <div class="caption">Percentage of women currently married or in union who are using (or whose partner is using) any method of contraception. Raw Value 1 is 2024 data, Raw Value 2 is 2015-2016 data given.</div>
+        
+      </div>
+      <div class="callout">
+        <div class="tag">Education</div>
+        <div class="headline">0.94 <span style="font-size:1rem;"></span></div>
+        
+        <div class="caption">state of turkmenistan regarding laws and regulations that guarantee full and equal access to women and men aged 15 years and older to sexual and reproductive health care, information and education. Additional info: no statistics beyong year 2022 is given</div>
+        
+      </div>
+      <div class="callout">
+        <div class="tag">Childcare</div>
+        <div class="headline">0.016</div>
+        
+        <div class="caption">Percentage
+of women
+with a live
+birth before
+age 18 (RW1-2024)</div>
+        <a class="caption" href="https://mics.unicef.org/sites/mics/files/2026-01/Turkmenistan%20MICS%202024%20SFR%20EN.pdf" style="text-decoration:underline; display:inline-block; margin-top:0.5rem;">Source ↗</a>
+      </div>
+      <div class="callout">
+        <div class="tag">Safety</div>
+        <div class="headline">0.328 <span style="font-size:1rem;">↑</span></div>
+        <div class="caption" style="margin-top:0;">was 0.036</div>
+        <div class="caption">percentage of women who feel safe (RW1) VS unsafe (RW2) in turkmenistan</div>
+        
+      </div>
+      <div class="callout">
+        <div class="tag">Marriage</div>
+        <div class="headline">0.064 <span style="font-size:1rem;">↑</span></div>
+        <div class="caption" style="margin-top:0;">was 0.059</div>
+        <div class="caption">Raw value #1 is  a percentage of women aged 20-24 in union who were married before the age of 18 in 2024. 
+Raw value #2 is the marriage rates before age 18 among
+women aged 20-49 in 2015-2016.</div>
+        <a class="caption" href="https://mics.unicef.org/sites/mics/files/2026-01/Turkmenistan%20MICS%202024%20SFR%20EN.pdf" style="text-decoration:underline; display:inline-block; margin-top:0.5rem;">Source ↗</a>
+      </div>
+      <div class="callout">
+        <div class="tag">Pay</div>
+        <div class="headline">0.23 <span style="font-size:1rem;">→</span></div>
+        <div class="caption" style="margin-top:0;">was 0.23</div>
+        <div class="caption">Gender wage gap (approximate). Raw Value 1 is in 2025. </div>
+        <a class="caption" href="https://birduino.kg/en/press/gender-and-climate-crisis-in-turkmenistan-systemic-challenges,-regional-pressures,-and-the-road-ahead#:~:text=Women%20in%20Turkmenistan%20suffer%20a%2023%25%20wage%20gap%2C,should%20be%20paid%20to%20women%E2%80%99s%20work%20in%20agriculture" style="text-decoration:underline; display:inline-block; margin-top:0.5rem;">Source ↗</a>
+      </div>
+      <div class="callout">
+        <div class="tag">Work</div>
+        <div class="headline">0.224 <span style="font-size:1rem;">↓</span></div>
+        <div class="caption" style="margin-top:0;">was 0.241</div>
+        <div class="caption">Women in managerial positions (RW1-2025. RW2-2016)</div>
+        <a class="caption" href="https://sdg.stat.gov.tm/en/indicator/5-5-2" style="text-decoration:underline; display:inline-block; margin-top:0.5rem;">Source ↗</a>
+      </div>
+      <div class="callout">
+        <div class="tag">Political representation</div>
+        <div class="headline">0.254 <span style="font-size:1rem;">↓</span></div>
+        <div class="caption" style="margin-top:0;">was 0.258</div>
+        <div class="caption">Percentage of women in the Mejilis (Assembly). Raw data 1 - 2025. Raw Data 2 - 2014.</div>
+        
+      </div>
+      <div class="callout">
+        <div class="tag">Parenthood</div>
+        <div class="headline">0.018 <span style="font-size:1rem;">↑</span></div>
+        <div class="caption" style="margin-top:0;">was 0.078</div>
+        <div class="caption">percentage of children whose parent is living elsewhere (RW1-mother, RW2-father)</div>
+        
+      </div>
+      <div class="callout">
+        <div class="tag">Economics</div>
+        <div class="headline">0.3824 <span style="font-size:1rem;">↓</span></div>
+        <div class="caption" style="margin-top:0;">was 0.3946</div>
+        <div class="caption">Female labor force participation rate in 2025 (Raw value 1), and in 2015 (Raw value 2)</div>
+        <a class="caption" href="https://data.worldbank.org/indicator/SL.TLF.CACT.FE.ZS?end=2025&start=2025&view=map&year=2015" style="text-decoration:underline; display:inline-block; margin-top:0.5rem;">Source ↗</a>
+      </div>
   </div>
 </main>
 <footer>Central Asia Gender Implementation Gap Index — built from live Airtable data.</footer>
