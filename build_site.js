@@ -82,6 +82,8 @@ async function fetchOutcomeStats() {
     }
     return byCountry;
 }
+
+async function listAllRecords() {
     let records = [];
     let offset;
     do {
