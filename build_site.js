@@ -16,10 +16,10 @@ if (!TOKEN || !BASE_ID) {
 const API_ROOT = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE)}`;
 
 const PILLARS = [
-    { field: "Legal Frameworks Score", label: "Legal Frameworks", short: "Legal", color: "#C08A2E" },
-    { field: "Institutional Enforcement Score", label: "Institutional Enforcement", short: "Institutional", color: "#2B8C99" },
-    { field: "Civil Society Signal Score", label: "Civil Society Signal", short: "Civil Society", color: "#C25B42" },
-    { field: "Outcome Convergence Score", label: "Outcome Convergence", short: "Outcome", color: "#4F8B5E" },
+    { field: "Legal Frameworks Score", label: "Legal Frameworks", short: "Legal", color: "#0F52BA" },
+    { field: "Institutional Enforcement Score", label: "Institutional Enforcement", short: "Institutional", color: "#0080FE" },
+    { field: "Civil Society Signal Score", label: "Civil Society Signal", short: "Civil Society", color: "#5097A4" },
+    { field: "Outcome Convergence Score", label: "Outcome Convergence", short: "Outcome", color: "#73C2FB" },
 ];
 
 function slugify(name) {
@@ -32,7 +32,56 @@ function fmtScore(v) {
     return n;
 }
 
-async function listAllRecords() {
+async function fetchTable(tableName, filterFormula) {
+    const root = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(tableName)}`;
+    let records = [];
+    let offset;
+    do {
+        const url = new URL(root);
+        if (filterFormula) url.searchParams.set("filterByFormula", filterFormula);
+        if (offset) url.searchParams.set("offset", offset);
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${TOKEN}` } });
+        if (!res.ok) throw new Error(`Failed to fetch ${tableName}: ${res.status} ${await res.text()}`);
+        const data = await res.json();
+        records = records.concat(data.records);
+        offset = data.offset;
+    } while (offset);
+    return records;
+}
+
+async function fetchOutcomeStats() {
+    const indicators = await fetchTable("Indicators");
+    const indicatorNameById = Object.fromEntries(
+        indicators.map(r => [r.id, r.fields["Indicator Name"]])
+    );
+
+    const scores = await fetchTable("Scores", '{Pillar} = "Outcome Convergence"');
+
+    // Group by trimmed country name (using the lookup field, which already
+    // resolves to plain text — more robust than matching linked-record IDs).
+    const byCountry = {};
+    for (const s of scores) {
+        const raw1 = s.fields["Raw value 1"];
+        const notes = s.fields["notes"];
+        if (!raw1 && !notes) continue; // skip empty placeholder rows
+
+        const countryNames = (s.fields["countries (eng) (from countries link)"] || []).map(n => n.trim());
+        const indicatorIds = s.fields["Indicator"] || [];
+        const stat = {
+            indicator: indicatorIds.map(id => indicatorNameById[id]).filter(Boolean).join(", "),
+            raw1,
+            raw2: s.fields["Raw value 2"],
+            notes,
+            trend: s.fields["Trend"],
+            source: s.fields["Source(s)"],
+        };
+        for (const name of countryNames) {
+            if (!byCountry[name]) byCountry[name] = [];
+            byCountry[name].push(stat);
+        }
+    }
+    return byCountry;
+}
     let records = [];
     let offset;
     do {
@@ -115,6 +164,12 @@ function pageShell(title, body) {
   .ring-label{ position:absolute; top:0; left:0; height:100%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.05rem; }
   .ring-name{ font-size:0.68rem; color:var(--ink-dim); font-weight:600; margin-top:0.5rem; line-height:1.3; }
 
+  .stat-callouts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:1.6rem; }
+  .callout{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.2rem 1.35rem; box-shadow: 0 1px 2px rgba(30,25,10,0.03); }
+  .callout .headline{ font-size:1.5rem; font-weight:800; color:#0F52BA; letter-spacing:-0.01em; }
+  .callout .caption{ font-size:0.82rem; color:var(--ink-dim); margin-top:0.4rem; line-height:1.5; font-weight:500; }
+  .callout .tag{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); font-weight:700; margin-bottom:0.4rem; }
+
   .back{ display:inline-flex; align-items:center; gap:0.35rem; margin-bottom:1.4rem; font-size:0.82rem; color:var(--ink-dim); font-weight:600; }
   .back:hover{ color:var(--ink); }
 
@@ -146,11 +201,17 @@ function countryCard(c) {
   </a>`;
 }
 
-function countryDetailPage(c) {
+function countryDetailPage(c, outcomeStats) {
+    const stats = outcomeStats[c.fields["countries (eng)"].trim()] || [];
+    const trendArrow = { Increasing: "↑", Decreasing: "↓", Stable: "→" };
     const body = `
 <header class="hero">
   <p class="eyebrow">Country profile</p>
-  <h1>${c.fields["countries (eng)"]}</h1>
+  <div style="display:flex; align-items:center; gap:0.9rem; margin-bottom:0.2rem;">
+    <img src="https://flagcdn.com/w80/${(c.fields["ISO Code"] || "xx").toLowerCase()}.png"
+         alt="" width="48" style="border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+    <h1 style="margin:0;">${c.fields["countries (eng)"]}</h1>
+  </div>
   <p class="lede">Scores across CAGIGI's four pillars — the gap between formal gender legislation and its real-world implementation.</p>
 </header>
 <main>
@@ -164,6 +225,17 @@ function countryDetailPage(c) {
         </div>`).join("")}
     </div>
   </div>
+  ${stats.length ? `
+  <div class="stat-callouts">
+    ${stats.map(s => `
+      <div class="callout">
+        <div class="tag">${s.indicator || "Outcome"}</div>
+        <div class="headline">${s.raw1 || "—"}${s.trend ? ` <span style="font-size:1rem;">${trendArrow[s.trend] || ""}</span>` : ""}</div>
+        ${s.raw2 ? `<div class="caption" style="margin-top:0;">was ${s.raw2}</div>` : ""}
+        <div class="caption">${s.notes || ""}</div>
+        ${s.source ? `<a class="caption" href="${s.source}" style="text-decoration:underline; display:inline-block; margin-top:0.5rem;">Source ↗</a>` : ""}
+      </div>`).join("")}
+  </div>` : ""}
 </main>`;
     return pageShell(c.fields["countries (eng)"], body);
 }
@@ -195,12 +267,14 @@ async function main() {
     const records = await listAllRecords();
     console.log(`Found ${records.length} published countr${records.length === 1 ? "y" : "ies"}.`);
 
+    const outcomeStats = await fetchOutcomeStats();
+
     await mkdir("docs/countries", { recursive: true });
     await writeFile("docs/index.html", indexPage(records));
 
     for (const c of records) {
         const slug = slugify(c.fields["countries (eng)"]);
-        await writeFile(`docs/countries/${slug}.html`, countryDetailPage(c));
+        await writeFile(`docs/countries/${slug}.html`, countryDetailPage(c, outcomeStats));
         console.log(`Built docs/countries/${slug}.html`);
     }
 
