@@ -1,18 +1,3 @@
-// CAGIGI Source Monitor — GitHub Actions version
-//
-// Same idea as the Airtable Automation script: re-fetch each source URL,
-// hash the page text, and flag the record if it changed since last check.
-// This version talks to Airtable over its REST API instead of running
-// inside Airtable, so it can be triggered by GitHub Actions on a free
-// schedule with no Airtable Automations plan required.
-//
-// It never writes to your Scores table — only to Source Monitor.
-//
-// Required environment variables (set as GitHub secrets, not hardcoded):
-//   AIRTABLE_TOKEN     - personal access token, scoped to data.records:read/write
-//   AIRTABLE_BASE_ID   - starts with "app..." (found in the base's API docs / URL)
-//   AIRTABLE_TABLE     - table name, defaults to "Source Monitor" if unset
-
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE_ID = process.env.AIRTABLE_BASE_ID;
 const TABLE = process.env.AIRTABLE_TABLE || "Source Monitor";
