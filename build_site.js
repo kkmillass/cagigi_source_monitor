@@ -1,3 +1,7 @@
+// CAGIGI static site builder
+// Fetches published countries from Airtable and generates static HTML pages
+// into docs/ — ready for GitHub Pages to serve directly.
+
 const { mkdir, writeFile } = require("fs/promises");
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
@@ -53,11 +57,14 @@ async function fetchOutcomeStats() {
 
     const scores = await fetchTable("Scores", '{Pillar} = "Outcome Convergence"');
 
+    // Group by trimmed country name (using the lookup field, which already
+    // resolves to plain text — more robust than matching linked-record IDs).
     const byCountry = {};
     for (const s of scores) {
         const raw1 = s.fields["Raw value 1"];
         const notes = s.fields["notes"];
-        if (!raw1 && !notes) continue; 
+        if (!raw1 && !notes) continue; // skip empty placeholder rows
+
         const countryNames = (s.fields["countries (eng) (from countries link)"] || []).map(n => n.trim());
         const indicatorIds = s.fields["Indicator"] || [];
         const stat = {
@@ -92,6 +99,7 @@ async function listAllRecords() {
     return records;
 }
 
+// Circular gauge — value 0-100, null renders an empty dashed ring.
 function ringGauge(value, color, size = 84, strokeWidth = 8) {
     const r = (size - strokeWidth) / 2;
     const c = 2 * Math.PI * r;
@@ -176,7 +184,7 @@ function pageShell(title, body) {
   <div class="nav-links"><a href="index.html">Countries</a></div>
 </nav>
 ${body}
-<footer>Central Asia Gender Implementation Gap Index — built from live Airtable data.</footer>
+<footer>Central Asia Gender Implementation Gap Index — built from live Airtable data. <a href="https://doi.org/10.5281/zenodo.22343054"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22343054.svg" alt="DOI" style="vertical-align:middle; margin-left:8px;"></a></footer>
 </body>
 </html>`;
 }
